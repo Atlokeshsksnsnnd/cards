@@ -3,7 +3,10 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"math/rand"
+	"os"
 	"strings"
+	"time"
 )
 
 // Type Deck represents the deck of cards which is []string.
@@ -43,4 +46,28 @@ func (d Deck) toString() string {
 // Save Deck to the file
 func (d Deck) saveDeckToFile(fileName string) error {
 	return ioutil.WriteFile(fileName, []byte(d.toString()), 0666)
+}
+
+// Read Deck From File
+func readDeckFromFile(fileName string) Deck {
+	bs, err := ioutil.ReadFile(fileName)
+	if err != nil {
+		fmt.Println("Error:", err)
+		os.Exit(1)
+	}
+
+	s := string(bs)
+	return Deck(strings.Split(s, ","))
+}
+
+func (d Deck) shuffle() Deck {
+	source := rand.NewSource(time.Now().UnixNano())
+	r := rand.New(source)
+	for i := range d {
+		newPosition := r.Intn(len(d) - 1)
+		d[i], d[newPosition] = d[newPosition], d[i]
+
+	}
+
+	return d
 }

@@ -1,10 +1,9 @@
 package main
 
-const name = "lojesh"
-
 func main() {
 
-	cards := newDeck()
-	cards.saveDeckToFile("cards.txt")
+	cards := readDeckFromFile("cards.txt")
+	cards.shuffle()
+	cards.print()
 
 }
